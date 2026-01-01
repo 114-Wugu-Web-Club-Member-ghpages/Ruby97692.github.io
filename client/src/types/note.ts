@@ -1,5 +1,6 @@
 export interface Note {
   id: string;
+  slug: string;
   title: string;
   content: string;
   subject: string;

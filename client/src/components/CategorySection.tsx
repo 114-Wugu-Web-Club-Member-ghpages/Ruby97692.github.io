@@ -1,5 +1,5 @@
 import type { Note } from "@/types/note";
-import { notes } from "@/data/notes";
+import { notes } from "@/data/content";
 import { Card, CardContent } from "@/components/ui/card";
 import {
   Calculator,
@@ -60,8 +60,8 @@ export default function CategorySection() {
     英文: { icon: Languages, color: "bg-indigo-500/20 text-indigo-400" },
   };
 
-  const categoryCounts = notes?.reduce(
-    (acc, note) => {
+  const categoryCounts = notes.reduce(
+    (acc: Record<string, number>, note: Note) => {
       acc[note.category] = (acc[note.category] || 0) + 1;
       return acc;
     },

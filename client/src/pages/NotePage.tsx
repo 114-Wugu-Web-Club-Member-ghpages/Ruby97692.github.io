@@ -1,6 +1,7 @@
 import { useParams, Link } from "wouter";
 import type { Note } from "@/types/note";
-import { notes } from "@/data/notes";
+import { notes } from "@/data/content";
+import MarkdownContent from "@/components/MarkdownContent";
 import StarField from "@/components/StarField";
 import Header from "@/components/Header";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -12,9 +13,9 @@ import { format } from "date-fns";
 import { zhTW } from "date-fns/locale";
 
 export default function NotePage() {
-  const { id } = useParams();
+  const { slug } = useParams();
 
-  const note = notes.find((n) => n.id === id);
+  const note = notes.find((n) => n.slug === slug);
   const isLoading = false;
 
   const categoryColors: Record<string, string> = {
@@ -104,47 +105,9 @@ export default function NotePage() {
                 </div>
               </CardHeader>
 
-              <CardContent className="prose prose-invert max-w-none pb-12">
-                <div className="leading-relaxed space-y-6 text-foreground/90" data-testid="content-note-body">
-                  {note.content.split("\n\n").map((paragraph, idx) => {
-                    if (paragraph.startsWith("## ")) {
-                      return (
-                        <h2 key={idx} className="text-2xl font-bold mt-8 mb-4 text-foreground">
-                          {paragraph.replace("## ", "")}
-                        </h2>
-                      );
-                    } else if (paragraph.startsWith("### ")) {
-                      return (
-                        <h3 key={idx} className="text-xl font-semibold mt-6 mb-3 text-foreground">
-                          {paragraph.replace("### ", "")}
-                        </h3>
-                      );
-                    } else if (paragraph.startsWith("```")) {
-                      const code = paragraph.replace(/```/g, "").trim();
-                      return (
-                        <pre key={idx} className="bg-muted/50 p-4 rounded-md overflow-x-auto">
-                          <code className="text-sm font-mono">{code}</code>
-                        </pre>
-                      );
-                    } else if (paragraph.match(/^(\d+\.|-)/) || paragraph.includes("\n- ") || paragraph.includes("\n1. ")) {
-                      const items = paragraph.split("\n").filter((line) => line.trim());
-                      return (
-                        <ul key={idx} className="list-disc list-inside space-y-2 ml-4">
-                          {items.map((item, i) => (
-                            <li key={i} className="text-foreground/90">
-                              {item.replace(/^[0-9]+\.\s|-\s/, "")}
-                            </li>
-                          ))}
-                        </ul>
-                      );
-                    } else {
-                      return (
-                        <p key={idx} className="text-base leading-relaxed">
-                          {paragraph}
-                        </p>
-                      );
-                    }
-                  })}
+              <CardContent className="pb-12">
+                <div data-testid="content-note-body">
+                  <MarkdownContent content={note.content} />
                 </div>
               </CardContent>
             </Card>

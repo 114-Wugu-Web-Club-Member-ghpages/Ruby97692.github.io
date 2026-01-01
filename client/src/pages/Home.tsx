@@ -1,7 +1,7 @@
 import { useState, useMemo } from "react";
 import { Link } from "wouter";
 import type { Note } from "@/types/note";
-import { notes } from "@/data/notes";
+import { notes } from "@/data/content";
 import StarField from "@/components/StarField";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
@@ -73,6 +73,7 @@ export default function Home() {
                     <NoteCard
                       key={note.id}
                       id={note.id}
+                      slug={note.slug}
                       title={note.title}
                       preview={note.content.substring(0, 150) + "..."}
                       subject={note.subject}
