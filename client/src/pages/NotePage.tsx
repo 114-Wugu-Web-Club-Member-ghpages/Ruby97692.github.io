@@ -1,6 +1,6 @@
 import { useParams, Link } from "wouter";
-import { useQuery } from "@tanstack/react-query";
-import type { Note } from "@shared/schema";
+import type { Note } from "@/types/note";
+import { notes } from "@/data/notes";
 import StarField from "@/components/StarField";
 import Header from "@/components/Header";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -14,16 +14,8 @@ import { zhTW } from "date-fns/locale";
 export default function NotePage() {
   const { id } = useParams();
 
-  const { data: note, isLoading } = useQuery<Note>({
-    queryKey: ["/api/notes", id],
-    queryFn: async ({ queryKey }) => {
-      const [path, noteId] = queryKey;
-      const res = await fetch(`${path}/${noteId}`, { credentials: "include" });
-      if (!res.ok) throw new Error(`${res.status}: ${res.statusText}`);
-      return await res.json();
-    },
-    enabled: !!id,
-  });
+  const note = notes.find((n) => n.id === id);
+  const isLoading = false;
 
   const categoryColors: Record<string, string> = {
     數學: "bg-blue-500/20 text-blue-300 border-blue-500/30",
